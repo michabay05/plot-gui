@@ -14,8 +14,6 @@ const float MIN_TICKS_PER_QUADRANT = 10;
 const float MAX_TICKS_PER_QUADRANT = 50;
 
 #define ASPECT_RATIO() ((float)GetRenderWidth() / (float)GetRenderHeight())
-#define OUT_OF_VIEW                                                                                \
-    (Vector2) { -100, -100 }
 
 typedef struct
 {
@@ -136,15 +134,31 @@ void plot_point(const Rectangle rect, const CoordPlane cp, float x, float y)
 void plot_points(const Rectangle rect, const CoordPlane cp, const Vector2* const points,
                  size_t size)
 {
+#if 1
+    const Vector2 TICK_OFFSETS = {
+        rect.width / cp.total_ticks.x,
+        rect.height / cp.total_ticks.y,
+    };
+    
+    for (size_t i = 1; i < size; i++) {
+        DrawLineEx(
+            Vector2Add(cp.origin, Vector2Multiply(TICK_OFFSETS, (Vector2){points[i-1].x, -points[i-1].y})),
+            Vector2Add(cp.origin, Vector2Multiply(TICK_OFFSETS, (Vector2){points[i].x, -points[i].y})),
+            2.25f,
+            RED
+        );
+    }
+#else
     for (size_t i = 0; i < size; i++) {
         plot_point(rect, cp, points[i].x, points[i].y);
     }
+#endif
 }
 
 void update(CoordPlane* cp)
 {
     float mouse_wheel = GetMouseWheelMove();
-    const Vector2 ZOOM_DIFF_TO_TICKS_DIFF = {2, 2};
+    const Vector2 ZOOM_DIFF_TO_TICKS_DIFF = {1, 1};
     if (mouse_wheel < 0.0f) {
         cp->ticks_per_quadrant = Vector2Add(cp->ticks_per_quadrant, ZOOM_DIFF_TO_TICKS_DIFF);
     } else if (mouse_wheel > 0.0f) {
@@ -183,7 +197,7 @@ int main(void)
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
 
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Plot GUI");
 
     font = LoadFontEx("resources/CM Serif Roman.ttf", 20, NULL, 0);
