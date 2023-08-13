@@ -1,0 +1,20 @@
+[
+ {
+  "directory": "C:\\Users\\Miku\\Documents\\plot",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-pedantic",
+   "-std=c17",
+   "-Iinclude",
+   "-Ivendor/raylib/include",
+   "-O3",
+   "-c",
+   "src/main.c",
+   "-o",
+   "obj/release/main.o"
+  ],
+  "file": "src/main.c"
+ }
+]
