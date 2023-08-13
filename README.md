@@ -3,6 +3,8 @@ This project is intended to a Desmos clone made in C using the raylib library.
 
 ## Quickstart
 ```
+mkdir bin
+mkdir obj
 make release
 bin/release/plot-gui
 ```
