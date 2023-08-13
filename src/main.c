@@ -9,7 +9,7 @@ Vector2 ticks_frequency;
 const float TICK_THICKNESS = 1.5f;
 const Color TICK_COLOR = {128, 128, 128, 125};
 const Vector2 MAX_TICKS_PER_QUADRANT = {50, 50};
-const Vector2 MIN_TICKS_PER_QUADRANT = {5, 5};
+const Vector2 MIN_TICKS_PER_QUADRANT = {10, 10};
 
 void grid_draw(const Vector2 pos, const Vector2 size)
 {
@@ -26,7 +26,7 @@ void grid_draw(const Vector2 pos, const Vector2 size)
     ticks_per_quadrant.y = fmax(MIN_TICKS_PER_QUADRANT.y, ticks_per_quadrant.y);
 
     // Draw minor gridlines
-    const Vector2 QUADRANT_TICK_OFFSETS = Vector2Divide(size, ticks_per_quadrant);
+    const Vector2 QUADRANT_TICK_OFFSETS = Vector2Divide(Vector2Scale(size, 0.5f), ticks_per_quadrant);
     Vector2 curr_pos, tick_start, tick_end;
 
     int i;
@@ -93,7 +93,7 @@ int main(void)
     const int FONT_SIZE = 20;
     Font font = LoadFontEx("resources/CM Serif Roman.ttf", FONT_SIZE, NULL, 0);
 
-    ticks_per_quadrant = (Vector2){5, 5};
+    ticks_per_quadrant = MIN_TICKS_PER_QUADRANT;
     ticks_frequency = Vector2One();
 
     while (!WindowShouldClose()) {
